@@ -1,17 +1,28 @@
 import React from 'react'
+import Image from 'next/image'
 import { DocsThemeConfig } from 'nextra-theme-docs'
 
 const config: DocsThemeConfig = {
-  logo: <span>My Project</span>,
+ logo: (
+    <>
+    <Image src="https://docs.grassecon.org/assets/favicon.svg" alt='CIC Stack' width={30} height={30} />
+      <span style={{ marginLeft: '.4em' }}>
+        CIC Stack
+      </span>
+    </>
+  ),
   project: {
-    link: 'https://github.com/shuding/nextra-docs-template',
+    link: 'https://github.com/grassrootseconomics',
   },
   chat: {
-    link: 'https://discord.com',
+    link: 'https://discord.gg/xayVsrkHPQ',
   },
-  docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+  docsRepositoryBase: 'https://github.com/grassrootseconomics/cic-stack-docs',
   footer: {
-    text: 'Nextra Docs Template',
+    text: 'CIC Stack',
+  },
+  nextThemes: {
+    defaultTheme: 'light'
   },
 }
 

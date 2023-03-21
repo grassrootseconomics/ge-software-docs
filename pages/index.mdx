@@ -1,11 +1,38 @@
 # Introduction
  
-Welcome to Nextra! This is a basic docs template. You can use it as a starting point for your own project :)
+The CIC Stack is a set of OSS software to provide a platform to setup and run community inclusion currencies.
 
-## What is Nextra?
+## Technology Setup
 
-A **simple**, **powerful** and **flexible** site generation framework with everything you love from Next.js.
+Generally the technical setup is done by a local *Platform Service Provider* like **Grassroots Economics**.
 
-## Documentation
+1. **Open Source (CopyLeft) Software**: Ensure that you trust the software being used and that even if it is open source now, that improvements and upgrades will remain open source.
+2. **Distributed Ledger**: We highly recommend developing your own ledger system where members of the community hold nodes that decentralize and secure the ledger.
+3. **Interfaces / Wallets**: We’ve built custodial systems that enable users to assign guardians that can help them reset lost passwords.
+4. **Data Sharing**: Given the consent of the community, anonymous transaction data can be recorded and displayed.
 
-The documentation is available at [https://nextra.site](https://nextra.site).
+The guiding principles for system design and contribution are described below with emphasis on software development and infrastructure:
+
+1. **Massively scalable**: The queueing and syncing engine should be able to queue and sync state change requests and state queries to the full capacity of the integrated networks, without any loss of data and with minimum middleware latency for the end-user.
+2. **Avoid lock-ins**: No part of the system should rely on and/or integrate with libraries or services that cannot be reasonably understood and/or adapted. Nor should the work required to replace a component be unreasonable large as a result of external dependencies. Adaptable dependencies should expose an implemntable interface.
+3. **Lean dependency graph**: The base should make use of primitives and standard libraries as much as possible.
+4. **No soft lock-in to virtual environments**: Too many modern software projects only provides reasonable ease of use through mechanisms like Docker or similar frameworks. Care should be taken to incur minimum penalty for using the application and tooling in a local host environment. Documentation must exist and be maintained to facilitate this.
+5. **Coherent configurations regardless of entry-point**: Merged ini/toml-format configuration files constitute configuration schemas and overrides, translating to a configuration directive vocabulary overridable by environment variables of the same name.
+6. **CLI tooling framework**: Layered definitions of command line arguments, so that concepts common for each layer is only defined in one place. Full and intuitive control of overriding configuration directives with command line arguments and flags. Easy generation of base resource objects (such as rpc, wallet) directly from rendered configurations. Facilitate and encourage use of chainable commands (e.g. UNIX pipelines).
+
+## Architecture
+
+![](/high_level_overview.png)
+
+Summary:
+
+- Fully Open Source under AGPL 3.0 License.
+- Automates the full lifecycle of blockchain transactions.
+- Supported on [Celo](https://celo.org) and can be extended to support any EVM-compatible blockchain.
+- Includes a broad collection CLI tools for most common chain operations.
+- Supports both local and containerized environments.
+- Support last mile front-end APIs and integrations.
+
+## License
+
+*All* software components are licensed under the [AGPL 3.0 License](https://www.gnu.org/licenses/agpl-3.0.en.html) unless otherwise explicitly stated in the code repository or file.

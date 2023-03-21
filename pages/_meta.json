@@ -1,15 +1,17 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "blockchain": "Blockchain",
+  "smart-contracts": "Smart Contracts",
   "about": {
-    "title": "About",
-    "type": "page"
+    "title": "Core Docs",
+    "type": "page",
+    "href": "https://docs.grassecon.org",
+    "newWindow": true
   },
   "contact": {
-    "title": "Contact ↗",
+    "title": "Blog",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://grassecon.org/category/blog",
     "newWindow": true
   }
 }
