@@ -18,6 +18,9 @@ const config: DocsThemeConfig = {
     link: 'https://discord.gg/xayVsrkHPQ',
   },
   docsRepositoryBase: 'https://github.com/grassrootseconomics/cic-stack-docs',
+  useNextSeoProps: () => ({
+    titleTemplate: "%s | CIC Stack",
+  }),
   sidebar: {
     defaultMenuCollapseLevel: 1,
   },

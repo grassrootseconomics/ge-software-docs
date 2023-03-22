@@ -1,1 +1,61 @@
-# Blockchain Sub
+# Celo Blockchain
+
+All CIC Stack components have been specifically developed to run on Celo, however it is easy to adapt it to other EVM blockchains.
+
+## Full node
+
+CIC Stack specifically requires a full node with the flowing API's enabled:
+
+- eth.
+- net.
+- txpool.
+- debug.
+
+And the following transports also enabled:
+
+- GraphQL.
+- Websocket.
+- RPC.
+
+## Docker deployment
+
+We provide an [easy to use Docker setup](https://github.com/grassrootseconomics/celo-node) to quickly setup a full node.
+
+### System Requirements
+
+For Alfajores testnet:
+
+- 3 vCPU
+- 4 GB RAM
+- 80 GB SSD storage
+- 100Mbps network connection
+
+For Mainnet:
+
+- 4 vCPU
+- 6 GB RAM
+- 200 GB SSD storage
+- 100Mbps network connection
+
+
+### Prerequisites
+
+- Docker.
+- Docker Compose v2.
+- `chrony` or any other NTP daemon.
+- A download manager e.g. `aria2`.
+
+#### Quick Docker installation
+
+```bash
+$ apt update && apt upgrade --yes
+$ apt install chrony curl git unzip
+$ curl -fsSL https://get.docker.com | bash
+# Docker now ships with docker-compose v2, you can make it available in path by adding the following line to your .profile
+# export PATH="/usr/libexec/docker/cli-plugins:$PATH"
+```
+
+### Setup
+
+
+
