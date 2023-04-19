@@ -1,3 +1,5 @@
+import { Callout } from 'nextra-theme-docs'
+
 # Celo Blockchain
 
 All CIC Stack components have been specifically developed to run on Celo, however it is easy to adapt it to other EVM blockchains.
@@ -44,8 +46,23 @@ For Mainnet:
 - Docker Compose v2.
 - `chrony` or any other NTP daemon.
 - A download manager e.g. `aria2`.
+- `zstd`
+
+#### Firewall Requirements
+
+The following ports should be open to the internet:
+
+- 30303/udp
+- 30303/tcp
+- 443/tcp
+- 80/tcp
 
 #### Quick Docker installation
+
+<Callout type="info" emoji="ℹ️">
+  This step can be skipped if you have Docker and Docker Compose already installed.
+</Callout>
+
 
 ```bash
 $ apt update && apt upgrade --yes
@@ -55,7 +72,80 @@ $ curl -fsSL https://get.docker.com | bash
 # export PATH="/usr/libexec/docker/cli-plugins:$PATH"
 ```
 
+#### Quick Other Required Packages installation
+
+<Callout type="info" emoji="ℹ️">
+  This step assumes you are on an Ubuntu/Debian based OS.
+</Callout>
+
+```bash
+sudo apt install curl git chrony aria2
+```
+
 ### Setup
 
+#### 1. Download Celo snapshot
+
+Celo offers periodic snapshots that allow you to get you blockchain node up and running as fast as possible. The links are:
+
+- Mainnet: `https://storage.googleapis.com/celo-chain-backup/mainnet/chaindata-latest.tar.zst`
+- Alfajores Testnet: `https://storage.googleapis.com/celo-chain-backup/alfajores/chaindata-latest.tar.zst`
+
+To download either of these:
+
+```bash
+$ aria2c -x 16 -s 16 $DOWNLOAD_LINK
+```
+
+The downloaded archive will be used in step 4.
+
+#### 2. Clone `grassrootseconomics/celo-node` Repo
+
+Grassroots Economics provides an opinionated and alternative devops setup flavor to the [official full node setup provided by Celo](https://docs.celo.org/network/node/run-mainnet).
 
 
+```bash
+$ git clone https://github.com/grassrootseconomics/celo-node.git
+```
+
+#### 3. Prepare directories
+
+```bash
+$ cd celo
+$ docker-compose up
+# After a few seconds, cancel the operation with CTRL+C
+```
+
+This step will create a `data` folder inside the current `celo` folder.
+
+#### 4. Extract and restore the downloaded snapshot
+
+<Callout type="warning" emoji="⚠️">
+  This step requires sudo permissions because of the container init user. It also requires running sensitive delete commands i.e. rm and mv.
+</Callout>
+
+```bash
+$ tar --use-compress-program=unzstd -xvf chaindata-latest.tar.zst
+$ sudo rm -rf data/celo/chaindata
+$ sudo mv chaindata data/celo
+```
+
+#### 4. Bring up Celo node container
+
+```bash
+$ docker network create celo
+$ docker-compose up -d
+```
+
+#### 4. Bring up Caddy container
+
+<Callout type="info" emoji="ℹ️">
+  This step should only be run if you plan on exposing your node's APIs to the internet.
+</Callout>
+
+```bash
+# In the celo-node folder
+$ cd caddy
+# Update the Caddyfile with correct values
+$ docker-compose up -d
+```
