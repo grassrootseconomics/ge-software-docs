@@ -66,7 +66,7 @@ The following ports should be open to the internet:
 
 ```bash
 $ apt update && apt upgrade --yes
-$ apt install chrony curl git unzip
+$ apt install curl
 $ curl -fsSL https://get.docker.com | bash
 # Docker now ships with docker-compose v2, you can make it available in path by adding the following line to your .profile
 # export PATH="/usr/libexec/docker/cli-plugins:$PATH"
@@ -79,7 +79,7 @@ $ curl -fsSL https://get.docker.com | bash
 </Callout>
 
 ```bash
-sudo apt install curl git chrony aria2
+$ apt install git chrony aria2 unzip
 ```
 
 ### Setup
@@ -112,6 +112,7 @@ $ git clone https://github.com/grassrootseconomics/celo-node.git
 
 ```bash
 $ cd celo
+$ docker network create celo
 $ docker-compose up
 # After a few seconds, cancel the operation with CTRL+C
 ```
@@ -126,6 +127,7 @@ This step will create a `data` folder inside the current `celo` folder.
 
 ```bash
 $ tar --use-compress-program=unzstd -xvf chaindata-latest.tar.zst
+# This assumes you are in the root folder of the cloned celo-node
 $ sudo rm -rf data/celo/chaindata
 $ sudo mv chaindata data/celo
 ```
@@ -133,7 +135,7 @@ $ sudo mv chaindata data/celo
 #### 4. Bring up Celo node container
 
 ```bash
-$ docker network create celo
+# If you want to run the testnet node, modify the docker-compose.yaml file first!
 $ docker-compose up -d
 ```
 
