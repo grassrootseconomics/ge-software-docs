@@ -22,7 +22,7 @@ const config: DocsThemeConfig = {
     titleTemplate: "%s | CIC Stack",
   }),
   sidebar: {
-    defaultMenuCollapseLevel: 1,
+    defaultMenuCollapseLevel: 2,
   },
   head: function Head() {
     return (
