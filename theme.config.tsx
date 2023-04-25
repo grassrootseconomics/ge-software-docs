@@ -17,7 +17,7 @@ const config: DocsThemeConfig = {
   chat: {
     link: 'https://discord.gg/xayVsrkHPQ',
   },
-  docsRepositoryBase: 'https://github.com/grassrootseconomics/cic-stack-docs',
+  docsRepositoryBase: 'https://github.com/grassrootseconomics/cic-stack-docs/blob/main',
   useNextSeoProps: () => ({
     titleTemplate: "%s | CIC Stack",
   }),
