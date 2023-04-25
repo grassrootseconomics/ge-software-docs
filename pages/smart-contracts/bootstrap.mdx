@@ -1,0 +1,51 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Quick Bootstrap
+
+Grassroots Economics provides a script to quickly deploy all core contracts + a sample Demurrage voucher contract that can be used for training purposes. The default values can be overridden.
+
+## Setup
+
+### Prerequisites
+
+- Python3 with Venv
+- At least 1 CELO Gas
+- Access to a Celo node
+
+<Callout type="info" emoji="ℹ️">
+  You may need to install additional build dependencies
+</Callout>
+
+```bash
+$ apt-get install -y autoconf automake build-essential libffi-dev libtool pkg-config python3-dev
+$ apt install python3.10-venv
+```
+
+### Script
+
+```bash
+$ git clone https://git.grassecon.net/grassrootseconomics/celo-bootstrap.git
+$ cd celo-bootstrap
+# Activate a virtual env
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+# Install Python dependencies
+$ pip install -r requirements.txt
+```
+
+You will need to also set some required environmental variables:
+
+
+```bash
+$ export RPC_PROVIDER=$YOUR_CELO_NODE_ENDPOINT
+$ export CHAIN_SPEC=evm:celo:44787:celo
+$ export KEY_FILE=keyfile.json
+```
+
+Finally, run the bootstrap process and take note of the temporary directory, which will contain the addresses of the deployed contracts:
+
+```bash
+$ bash boot.sh
+```
+
+

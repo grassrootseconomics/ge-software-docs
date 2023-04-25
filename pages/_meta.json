@@ -1,7 +1,9 @@
 {
   "index": "Introduction",
-  "blockchain": "Blockchain",
+  "blockchain": "Blockchain Stack",
   "smart-contracts": "Smart Contracts",
+  "custodial": "Custodial Stack",
+  "data": "Data Stack",
   "about": {
     "title": "Core Docs",
     "type": "page",
