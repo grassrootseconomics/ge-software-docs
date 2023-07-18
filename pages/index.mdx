@@ -6,19 +6,48 @@ The CIC Stack is a set of (Free) Open Source Software (FOSS) to provide a platfo
 
 Generally the technical setup is done by a local *Platform Service Provider* like **Grassroots Economics**.
 
-1. **Open Source (CopyLeft) Software**: Ensure that you trust the software being used and that even if it is open source now, that improvements and upgrades will remain open source.
-2. **Distributed Ledger**: We highly recommend developing your own ledger system where members of the community hold nodes that decentralize and secure the ledger.
-3. **Interfaces / Wallets**: We’ve built custodial systems that enable users to assign guardians that can help them reset lost passwords.
-4. **Data Sharing**: Given the consent of the community, anonymous transaction data can be recorded and displayed.
+The setup is GNU/Linux-first. No guarnatee or support will be provided for proprietary OS platforms.
+
+### Open Source and Copyleft
+
+Ensure that you trust the software being used. Even if it is open source now, that improvements and upgrades will remain open source.
+
+Even if it is open source, ensure that it is clear and transparent enough to reasonably understand and maintain.
+
+### Distributed Ledger
+
+We highly recommend using abstractions that enable portability to other ledger systems. Even if a ledger chain is benevolent and reasonable to use now, does not mean it remains that way forever.
+
+A long term goal should be for communities to collaborate in creating their own ledger systems, where members of the communities hold nodes that decentralize and secure the ledger with low harfdware requirements.
+
+### Interfaces/Wallets
+
+Provide and preserve abstractions that enable use of any wallet and network provider.
+
+Offer wallet custody system, aswell as recovery systems for lost keys and passwords.
+
+### Data Sharing
+
+Given the consent of the communities, anonymized transaction data can be recorded and displayed.
+
+Provide full understanding and transparency of the scope of data that is shared, and the possible risks and effects caused by data sharing.
+
+Ensure that the intelligence that is yielded from shared data is given back in full to the communities, to own and to do with as they see fit.
+
+## Guiding Principles
 
 The guiding principles for system design and contribution are described below with emphasis on software development and infrastructure:
 
-1. **Massively scalable**: The queueing and syncing engine should be able to queue and sync state change requests and state queries to the full capacity of the integrated networks, without any loss of data and with minimum middleware latency for the end-user.
-2. **Avoid lock-ins**: No part of the system should rely on and/or integrate with libraries or services that cannot be reasonably understood and/or adapted. Nor should the work required to replace a component be unreasonable large as a result of external dependencies. Adaptable dependencies should expose an implemntable interface.
-3. **Lean dependency graph**: The base should make use of primitives and standard libraries as much as possible.
-4. **No soft lock-in to virtual environments**: Too many modern software projects only provides reasonable ease of use through mechanisms like Docker or similar frameworks. Care should be taken to incur minimum penalty for using the application and tooling in a local host environment. Documentation must exist and be maintained to facilitate this.
-5. **Coherent configurations regardless of entry-point**: Merged ini/toml-format configuration files constitute configuration schemas and overrides, translating to a configuration directive vocabulary overridable by environment variables of the same name.
-6. **CLI tooling framework**: Layered definitions of command line arguments, so that concepts common for each layer is only defined in one place. Full and intuitive control of overriding configuration directives with command line arguments and flags. Easy generation of base resource objects (such as rpc, wallet) directly from rendered configurations. Facilitate and encourage use of chainable commands (e.g. UNIX pipelines).
+1. Avoid lock-ins: No part of the system should rely on and/or integrate with libraries or services that cannot be reasonably understood and adapted. Nor should the work required to replace a component be unreasonable large as a result of external dependencies. Adaptable dependencies should expose an implementable interface.
+
+2. Lean dependency graph: The base should make use of primitives and standard libraries as much as possible.
+
+3. No soft lock-in to virtual environments: Too many modern software projects only provides reasonable ease of use through mechanisms like Docker or similar frameworks. Care should be taken to incur minimum penalty for using the application and tooling in a local host environment. Documentation must exist and be maintained to facilitate this.
+
+4. Coherent configurations regardless of entry-point: Merged ini/toml-format configuration files constitute configuration schemas and overrides, translating to a configuration directive vocabulary overridable by environment variables of the same name.
+
+5. CLI tooling framework: Layered definitions of command line arguments, so that concepts common for each layer is only defined in one place. Full and intuitive control of overriding configuration directives with command line arguments and flags. Easy generation of base resource objects (such as rpc, wallet) directly from rendered configurations. Facilitate and encourage use of chainable commands (e.g. UNIX pipelines).
+
 
 ## Architecture
 
