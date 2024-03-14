@@ -1,0 +1,183 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Swap Pool
+
+The sarafu.network swap pool enables users to deposit and exchange (withdraw) community asset vouchers (CAVs), with prices being determined by their relative values against each other.
+
+## Setup
+
+### Prerequisites
+
+* Latest [ge-publish CLI](https://github.com/grassrootseconomics/ge-publish?tab=readme-ov-file#install) installed.
+* Atleast 1 CELO gas balance.
+
+### Publishing
+
+The swap pool consists of multiple smart contracts working in tandem. The general order of publishing the smart contracts is as follows:
+
+1. TokenRegistry
+2. Limiter
+    * TokenLimiter (optional)
+3. SwapPool
+4. PriceIndexQuoter
+
+#### 1. TokenRegistry
+
+```bash
+# Set your private key once for all future publish steps in this section
+$ export PRIVATE_KEY=$YOUR_PRIVATE_KEY_HERE
+$ ge-publish publish token-registry
+# The tx hash will contain the address of the newly published contract
+# Take note of the contract address
+$ export TOKEN_REGISTRY=$TOKEN_REGISTRY_ADDRESS_HERE
+```
+
+#### 2. Limiter
+
+```bash
+$ ge-publish publish limiter
+# The tx hash will contain the address of the newly published contract
+# Take note of the contract address
+$ export LIMITER=$LIMITER_ADDRRESS_HERE
+```
+
+#### 3. SwapPool
+
+```bash
+$ ge-publish publish swap-pool --name "My Pool" --symbol MYPOOL --decimals 6 --token-registry $TOKEN_REGISTRY --token-limiter $LIMITER
+# The tx hash will contain the address of the newly published contract
+# Take note of the contract address
+$ export POOL=$SWAP_POOL_ADDRESS_HEE
+```
+
+<Callout type="info" emoji="ℹ️">
+  The swap pool accepts parameters similar to those of an ERC20 interface (name, symbol, decimals). This allows it to be compatible with the TokenRegistry interface, thus allowing for the listing of multiple swap pools in a single smart contract.
+</Callout>
+
+#### 4. PriceIndexQuoter
+
+```bash
+$ ge-publish publish price-index-quoter
+# The tx hash will contain the address of the newly published contract
+# Take note of the contract address
+$ export PRICE_INDEX_QUOTER=$PRICE_INDEX_QUOTER
+```
+
+### SwapPool Configuration
+
+#### 1. Set the price index quoter
+
+Call the `setQuoter(address)` function on the SwapPool contract passing the PriceIndexQuoter address as the address parameter.
+
+#### 2. Set the pool fees
+
+Call the `setFee(uint256)` function on the SwapPool contract passing the expected fees percentage as PPM (parts per million) as the uint256 parameter.
+
+<Callout type="info" emoji="ℹ️">
+  To set a fee of 0.5%, you would pass a value of 5000.
+</Callout>
+
+### Permissions and access control management
+
+#### 1. Add a writer to the TokenRegistry
+
+Call the `addWriter(address)` function on the TokenRegistry contract passing the approved writer's address as the address parameter.
+
+#### 2. Add allowable CAV's
+
+The swap pool has a feature where it will only allow certain CAV's and ERC20 tokens.
+
+Call the `add(address)` function on the TokenRegistry contract passing the allowed CAV/token address as the address parameter.
+
+#### 3. Add CAV/token limits
+
+The swap pool has a feature where it will only allow a certain quantity of CAV's and ERC20 to be deposited in.
+
+Call the `setLimitFor(address, address, uint256)` function on the Limiter contract passing the CAV/token address as the first address parameter, the pool contract as the second address parameter and the max allowed value per deposit as the final uint256 parameter.
+
+## Usage
+
+### Setting relative price values on the PriceIndexQuoter
+
+By default, the relative price is always `10_000` (which represents that the CAV is redeemable for 10 KES worth of commodities, which is the unit of account). Therefore most CAV's published in Kenya can be swapped 1:1 (excluding fees). However in certain cases, a token or CAV may be of a relatively higher or lower value.
+
+We can consider fictional tokens which represent 1 USD and 1 TZS:
+
+* 1 USD = 14.5 (1 USD = 145 KES)
+* 1 TZS = 0.005 (1 KES = 20 TZS)
+
+Note that the fixed point precision is 4. Therefore every relative value is multiplied by 10^4. We would therefore set the relative prices as:
+
+* 1 USD = 145_000
+* 1 TZS = 50
+
+The PriceIndexQuoter already takes into account different decimals precision between different ERC20 tokens.
+
+To set the prices:
+
+Call the `setPriceIndexValue(address, uint256)` function on the PriceIndexQuoter contract passing the CAV/token address as the first address parameter and the relative price as the final uint256 parameter.
+
+### Deposit a CAV
+
+Calling the `deposit(address, uint256)` function is useful for seeding the pool with a certain voucher or token to allow others to withdraw them later.
+
+<Callout type="info" emoji="ℹ️">
+  Deposit is a one way movement of vouchers into the pool i.e. it is not a swap, you will not withdraw another voucher or token in exchange.
+</Callout>
+
+#### 1. Approve an allowance for the SwapPool to spend
+
+If you had previously approved the SwapPool to spend some of your vouchers, it is important to first reset it to 0 before granting it a new allowance:
+
+Call `approve(address, uint256)` on the voucher/token smart contract setting the SwapPool address as the first parameter and 0 as the second parameter.
+
+Next, call approve for the amount you wish to swap. This value may be slightly higher than the exact value you wish to swap:
+
+Call `approve(address, uint256)` on the voucher/token smart contract setting the SwapPool address as the first parameter and the amount you wish to swap as the final uint256 parameter.
+
+#### 2. Deposit some CAV's into the SwapPool
+
+Call `deposit(address, uint256)` on the SwapPool smart contract setting the CAV/token's address as the first parameter and the amount you wish to deposit as the final uint256 parameter.
+
+### Perform a swap
+
+Calling the `withdraw(address, address, uint256)` will perform a swap.
+
+<Callout type="info" emoji="ℹ️">
+  Swap will deposit some of the vouchers/tokens you hold in exchange of some other vouchers/tokens that you are interested in receiving.
+</Callout>
+
+
+#### 1. Approve an allowance for the SwapPool to spend
+
+If you had previously approved the SwapPool to spend some of your vouchers, it is important to first reset it to 0 before granting it a new allowance:
+
+Call `approve(address, uint256)` on the voucher/token smart contract setting the SwapPool address as the first parameter and 0 as the second parameter.
+
+Next, call approve for the amount you wish to swap. This value may be slightly higher than the exact value you wish to swap:
+
+Call `approve(address, uint256)` on the voucher/token smart contract setting the SwapPool address as the first parameter and the amount you wish to swap as the final uint256 parameter.
+
+#### 2.Swap
+
+Call `withdraw(address, address, uint256)` on the SwapPool smart contract setting the CAV/token's address that you wish to withdraw as the first parameter, the CAV/token's address that you wish to deposit as the second parameter and the amount you wish to swap as the final uint256 parameter.
+
+## Error codes
+
+* `ERR_XXX` - Permission error, you should be authortized to call that specific function.
+* `ERR_SEAL` - The function is no longer available as the smart contract is sealed.
+* `ERR_TOKEN` - The address passed is not a standard ERC20 token.
+* `ERR_TRANSFER` - `transferFrom` call failed. Usual cause is wrong approval allowance value.
+* `ERR_QUOTER` - Could not get a quote for the pair.
+* `ERR_BALANCE` - Either the initator or the swap pool does not have enough CAV/token balance to sucessfully complete the swap or deposit.
+* `ERR_REGISTRY` - Could not call the registry to check whether the token is allowed.
+* `ERR_UNAUTH_TOKEN` - Token not allowed.
+* `ERR_LIMITER` - Could not call the limiter to check whether the amount is within limit.
+* `ERR_LIMIT` - Limit exceeded.
+
+## Integration guidelines
+
+1. Check allowance before hand, if there is a smll allowance, reset it to 0 first before seeking another allowance.
+2. If the SwapPool contract is sealed, it _may_ be safe to set MAX_UINT256 as the allowance.
+3. Get the quote first before performing a swap.
+4. Check balances on both the pool and initator from the quote values before performing a swap to prevent gas wastage.
