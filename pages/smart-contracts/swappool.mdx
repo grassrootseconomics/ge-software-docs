@@ -2,7 +2,11 @@ import { Callout } from 'nextra-theme-docs'
 
 # Swap Pool
 
-The sarafu.network swap pool enables users to deposit and exchange (withdraw) community asset vouchers (CAVs), with prices being determined by their relative values against each other.
+The sarafu.network permissioned swap pool enables users to deposit and exchange (withdraw) community asset vouchers (CAVs), with prices being determined by their relative values against each other.
+
+## Source code
+
+* https://github.com/grassrootseconomics/erc20-pool
 
 ## Setup
 
@@ -91,7 +95,7 @@ Call the `add(address)` function on the TokenRegistry contract passing the allow
 
 #### 3. Add CAV/token limits
 
-The swap pool has a feature where it will only allow a certain quantity of CAV's and ERC20 to be deposited in.
+The swap pool has a feature where it will only allow a certain quantity of CAV's and ERC20 to be swapped. See below on how this works.
 
 Call the `setLimitFor(address, address, uint256)` function on the Limiter contract passing the CAV/token address as the first address parameter, the pool contract as the second address parameter and the max allowed value per deposit as the final uint256 parameter.
 
@@ -161,6 +165,7 @@ Call `approve(address, uint256)` on the voucher/token smart contract setting the
 #### 2.Swap
 
 Call `withdraw(address, address, uint256)` on the SwapPool smart contract setting the CAV/token's address that you wish to withdraw as the first parameter, the CAV/token's address that you wish to deposit as the second parameter and the amount you wish to swap as the final uint256 parameter.
+
 
 ## Error codes
 
