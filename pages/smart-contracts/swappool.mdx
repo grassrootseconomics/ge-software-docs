@@ -2,11 +2,7 @@ import { Callout } from 'nextra-theme-docs'
 
 # Swap Pool
 
-The sarafu.network permissioned swap pool enables users to deposit and exchange (withdraw) community asset vouchers (CAVs), with prices being determined by their relative values against each other.
-
-## Source code
-
-* https://github.com/grassrootseconomics/erc20-pool
+The Sarafu Network permissioned swap pool enables users to deposit and exchange (withdraw) community asset vouchers (CAVs), with prices being determined by their relative values against each other. Find the source code [here](https://github.com/grassrootseconomics/erc20-pool).
 
 ## Setup
 
@@ -182,7 +178,7 @@ Call `withdraw(address, address, uint256)` on the SwapPool smart contract settin
 
 ## Integration guidelines
 
-1. Check allowance before hand, if there is a smll allowance, reset it to 0 first before seeking another allowance.
+1. Check allowance before hand, if there is a small allowance, reset it to 0 first before seeking another allowance. Alternative use the `increaseAllowance` call.
 2. If the SwapPool contract is sealed, it _may_ be safe to set MAX_UINT256 as the allowance.
-3. Get the quote first before performing a swap.
+3. Get the `quote` first before performing a swap.
 4. Check balances on both the pool and initator from the quote values before performing a swap to prevent gas wastage.

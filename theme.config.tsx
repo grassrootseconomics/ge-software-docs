@@ -5,9 +5,9 @@ import { DocsThemeConfig } from 'nextra-theme-docs'
 const config: DocsThemeConfig = {
  logo: (
     <>
-    <Image src="/logo.svg" alt='CIC Stack' width={30} height={30} />
+    <Image src="/logo.svg" alt='Grassroots Economics Software' width={30} height={30} />
       <span style={{ marginLeft: '.4em' }}>
-        CIC Stack
+        Grassroots Economics Software
       </span>
     </>
   ),
@@ -19,7 +19,7 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/grassrootseconomics/cic-stack-docs/blob/main',
   useNextSeoProps: () => ({
-    titleTemplate: "%s | CIC Stack",
+    titleTemplate: "%s | Grassroots Economics Software",
   }),
   sidebar: {
     defaultMenuCollapseLevel: 2,
@@ -40,7 +40,7 @@ const config: DocsThemeConfig = {
         <meta name="twitter:creator" content="@grassecon" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="en_US" />
-        <meta property="og:site_name" content="CIC Stack" />
+        <meta property="og:site_name" content="Grassroots Economics Software" />
       </>
     );
   },  

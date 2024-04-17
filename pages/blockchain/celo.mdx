@@ -2,11 +2,11 @@ import { Callout } from 'nextra-theme-docs'
 
 # Celo Blockchain
 
-All CIC Stack components have been specifically developed to run on Celo, however it is easy to adapt it to other EVM blockchains.
+All Grassroots Economics components have been specifically developed to run on EVM blockchains, specifically targetting **Celo**, however it should be possible to adapt it to other blockchain and distributed ledgers technologies.
 
 ## Full node
 
-CIC Stack specifically requires a full node with the flowing API's enabled:
+_Sarafu Network_ and the _Custodial Stack_ specifically requires a full node with the flowing API's enabled:
 
 - eth.
 - net.
@@ -27,25 +27,24 @@ We provide an [easy to use Docker setup](https://github.com/grassrootseconomics/
 
 For Alfajores testnet:
 
-- 3 vCPU
-- 4 GB RAM
-- 80 GB SSD storage
+- 4 vCPU
+- 8 GB RAM
+- 200 GB SSD storage
 - 100Mbps network connection
 
 For Mainnet:
 
 - 4 vCPU
-- 6 GB RAM
-- 200 GB SSD storage
+- 12 GB RAM
+- 500 GB SSD storage
 - 100Mbps network connection
 
 
 ### Prerequisites
 
-- Docker.
-- Docker Compose v2.
-- `chrony` or any other NTP daemon.
-- A download manager e.g. `aria2`.
+- Docker
+- `chrony` or any other NTP daemon
+- A download manager e.g. `aria2`
 - `zstd`
 
 #### Firewall Requirements
@@ -60,7 +59,7 @@ The following ports should be open to the internet:
 #### Quick Docker installation
 
 <Callout type="info" emoji="ℹ️">
-  This step can be skipped if you have Docker and Docker Compose already installed.
+  This step can be skipped if you have Docker already installed.
 </Callout>
 
 
@@ -68,8 +67,6 @@ The following ports should be open to the internet:
 $ apt update && apt upgrade --yes
 $ apt install curl
 $ curl -fsSL https://get.docker.com | bash
-# Docker now ships with docker-compose v2, you can make it available in path by adding the following line to your .profile
-# export PATH="/usr/libexec/docker/cli-plugins:$PATH"
 ```
 
 #### Quick Other Required Packages installation
@@ -88,8 +85,9 @@ $ apt install git chrony aria2 unzip
 
 Celo offers periodic snapshots that allow you to get you blockchain node up and running as fast as possible. The links are:
 
-- Mainnet: `https://storage.googleapis.com/celo-chain-backup/mainnet/chaindata-latest.tar.zst`
-- Alfajores Testnet: `https://storage.googleapis.com/celo-chain-backup/alfajores/chaindata-latest.tar.zst`
+- Mainnet: `https://storage.googleapis.com/celo-chain-backup/mainnet/chaindata-latest.tar.zst` (Contains a missing block, may require manual rewinding)
+- Alfajores Tesnet: `https://storage.googleapis.com/celo-chain-backup/alfajores/chaindata-latest.tar.zst`
+- Baklava Testnet: `https://storage.googleapis.com/celo-chain-backup/baklava/chaindata-latest.tar.zst`
 
 To download either of these:
 
@@ -113,7 +111,7 @@ $ git clone https://github.com/grassrootseconomics/celo-node.git
 ```bash
 $ cd celo
 $ docker network create celo
-$ docker-compose up
+$ docker compose up
 # After a few seconds, cancel the operation with CTRL+C
 ```
 
@@ -128,7 +126,6 @@ This step will create a `data` folder inside the current `celo` folder.
 ```bash
 $ tar --use-compress-program=unzstd -xvf chaindata-latest.tar.zst
 # This assumes you are in the root folder of the cloned celo-node
-$ sudo rm -rf data/celo/chaindata
 $ sudo mv chaindata data/celo
 ```
 
@@ -136,7 +133,7 @@ $ sudo mv chaindata data/celo
 
 ```bash
 # If you want to run the testnet node, modify the docker-compose.yaml file first! i.e. --alfajores flag
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 #### 4. Bring up Caddy container
@@ -149,5 +146,5 @@ $ docker-compose up -d
 # In the celo-node folder
 $ cd caddy
 # Update the Caddyfile with correct values
-$ docker-compose up -d
+$ docker compose up -d
 ```
