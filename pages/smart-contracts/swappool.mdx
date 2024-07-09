@@ -95,6 +95,10 @@ The swap pool has a feature where it will only allow a certain quantity of CAV's
 
 Call the `setLimitFor(address, address, uint256)` function on the Limiter contract passing the CAV/token address as the first address parameter, the pool contract as the second address parameter and the max allowed value per deposit as the final uint256 parameter.
 
+<Callout type="info" emoji="ℹ️">
+  The second parameter of the setLimitFor must be a smart cointract address.
+</Callout>
+
 ## Usage
 
 ### Setting relative price values on the PriceIndexQuoter
