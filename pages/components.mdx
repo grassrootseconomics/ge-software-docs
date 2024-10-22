@@ -1,71 +1,105 @@
 # Grassroots Economics Software Components
 
-This is a non-exhaustive list and summary of software components written by Grassroots Economics. 
+This is a non-exhaustive list and summary of software components written by Grassroots Economics.
 
-## Dapp
+Our Git repositories are hosted at:
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [sarafu.network](https://github.com/grassrootseconomics/sarafu.network) | Lum | - | react/ts | mid | lo |
+* https://github.com/grassrootseconomics
+* https://git.grassecon.net
+* https://gitlab.com/grassrootseconomics (deprecated)
+
+Maintenance status description:
+
+* **Active**: The component is actively developed and maintained.
+* **Security-only**: The component has attained API stability, no more features will be added. Only security issues will be addressed.
+* **Deprecated**: This component is no longer maintained and has most likely been superseded by another component. Active in production but will soon become inactive.
+* **Inactive**: No longer in use by GE and only listed for historical purposed.
+
+## DApp
+
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [sarafu.network](https://github.com/grassrootseconomics/sarafu.network) | Lum | Will,Sohail | react/ts | active |
+| [storage-server](https://github.com/grassrootseconomics/storage-server) | Sohail | - | go | active |
 
 ## Smart Contracts
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [erc20-demurrage-token](https://git.grassecon.net/cicnet/erc20-demurrage-token) | Louis | Sohail | solidity,py | mid | hi |
-| [eth-token-index](https://git.grassecon.net/cicnet/eth-token-index) | Louis | Sohail | solidity,py | mid | hi |
-| [eth-faucet](https://git.grassecon.net/cicnet/eth-faucet) | Louis | Sohail | solidity,py | mid | hi |
-| [cic-contracts](https://git.grassecon.net/cicnet/cic-contracts) | Louis | Sohail | solidity,py | mid | hi |
-| [eth-accounts-index](https://git.grassecon.net/cicnet/eth-accounts-index) | Louis | Sohail | solidity,py | mid | hi |
-| [eth-address-index](https://git.grassecon.net/cicnet/eth-address-index) | Louis | Sohail | solidity,py | mid | hi |
-| [eth-contract-registry](https://git.grassecon.net/cicnet/eth-contract-registry) | Louis | Sohail | solidity,py | mid | hi |
-| [erc20-transfer-authorization](https://gitlab.com/cicnet/erc20-transfer-authorization) | Louis | Sohail | solidity, py | mid | lo |
-| [custodial-registration-proxy](https://github.com/grassrootseconomics/custodial-registration-proxy) | Sohail | - | solidity, py | lo | hi |
-| [erc20-pool](https://github.com/grassrootseconomics/erc20-pool) | Louis | Sohail | solidity, py | mid | mid |
-| [erc20-limiter](https://github.com/nolash/erc20-limiter) | Louis | - | solidity, py | mid | mid |
-| [price-index-quoter](https://github.com/grassrootseconomics/price-index-quoter) | Sohail | - | solidity, rust | mid | mid |
+| component | maintainer | support | tech |maintenance status |
+|---|---|---|---|---|
+| [erc20-demurrage-token](https://git.grassecon.net/cicnet/erc20-demurrage-token) | Louis | Sohail | solidity,py | security-only |
+| [eth-token-index](https://git.grassecon.net/cicnet/eth-token-index) | Louis | Sohail | solidity,py | security-only |
+| [eth-faucet](https://git.grassecon.net/cicnet/eth-faucet) | Louis | Sohail | solidity,py | security-only |
+| [cic-contracts](https://git.grassecon.net/cicnet/cic-contracts) | Louis | Sohail | solidity,py | security-only |
+| [eth-accounts-index](https://git.grassecon.net/cicnet/eth-accounts-index) | Louis | Sohail | solidity,py | security-only |
+| [eth-address-index](https://git.grassecon.net/cicnet/eth-address-index) | Louis | Sohail | solidity,py | security-only |
+| [eth-contract-registry](https://git.grassecon.net/cicnet/eth-contract-registry) | Louis | Sohail | solidity,py | security-only |
+| [erc20-transfer-authorization](https://gitlab.com/cicnet/erc20-transfer-authorization) | Louis | Sohail | solidity, py | security-only |
+| [custodial-registration-proxy](https://github.com/grassrootseconomics/custodial-registration-proxy) | Sohail | - | solidity, py | security-only |
+| [erc20-pool](https://github.com/grassrootseconomics/erc20-pool) | Louis | Sohail | solidity, py | security-only |
+| [erc20-limiter](https://github.com/nolash/erc20-limiter) | Louis | - | solidity, py | security-only |
+| [price-index-quoter](https://github.com/grassrootseconomics/price-index-quoter) | Sohail | - | solidity, rust | security-only |
 
 ## CLI
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [ge-publish](https://github.com/grassrootseconomics/ge-publish) | Sohail | - | go | lo | mid |
-| [chainlib-eth](https://github.com/chaintool-py/chainlib-eth?tab=readme-ov-file#cli-tooling) | Louis | Sohail | python | hi | hi |
-| [celo-bootstrap](https://git.grassecon.net/grassrootseconomics/celo-bootstrap) | Sohail | Louis | bash | lo | hi |
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [ge-publish](https://github.com/grassrootseconomics/ge-publish) | Sohail | - | go | active |
+| [chainlib-eth](https://github.com/chaintool-py/chainlib-eth?tab=readme-ov-file#cli-tooling) | Louis | Sohail | python | deprecated |
+| [celo-bootstrap](https://git.grassecon.net/grassrootseconomics/celo-bootstrap) | Sohail | Louis | bash | deprecated |
 
 
 ## Custodial System
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [cic-custodial](https://github.com/grassrootseconomics/cic-custodial) | Sohail | - | go | hi | mid |
-| [cic-chain-events](https://github.com/grassrootseconomics/cic-chain-events) | Sohail | - | go | mid | mid |
-| [cic-ussd](https://github.com/grassrootseconomics/cic-ussd) | Philip | - | nodejs/ts | hi | mid |
-| [cic-graph](https://github.com/grassrootseconomics/cic-graph) | Sohail | Philip,Lum | sql | lo | mid |
-| [cic-notify](hhttps://github.com/grassrootseconomics/cic-notify) | Sohail | - | go | mid | lo |
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [eth-custodial](https://github.com/grassrootseconomics/eth-custodial) | Sohail | - | go | active |
+| [eth-tracker](https://github.com/grassrootseconomics/eth-tracker) | Sohail |- | go | active |
+| [eth-indexer](https://github.com/grassrootseconomics/eth-indexer) | Sohail |- | go | active |
+| [ramp-service](https://github.com/grassrootseconomics/ramp-service) | Sohail |- | go | active |
+| [ussd-data-service](https://github.com/grassrootseconomics/ussd-data-service) | Sohail |- | go | active |
+| [ussd](https://git.grassecon.net/urdt/ussd) | Alfred,Carlos | Louis | go,go-vise | active |
+| [cic-graph](https://github.com/grassrootseconomics/cic-graph) | Sohail | Philip,Lum | sql | active |
+| [cic-custodial](https://github.com/grassrootseconomics/cic-custodial) | Sohail | - | go | deprecated |
+| [cic-chain-events](https://github.com/grassrootseconomics/cic-chain-events) | Sohail | - | go | deprecated |
+| [cic-ussd](https://github.com/grassrootseconomics/cic-ussd) | Philip | - | nodejs/ts | deprecated |
+| [cic-notify](hhttps://github.com/grassrootseconomics/cic-notify) | Sohail | - | go | deprecated |
 
 ## Internal Libraries
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [celoutils](https://github.com/grassrootseconomics/celoutils) | Sohail | - | go | lo | hi |
-| [w3-celo-patch](https://github.com/grassrootseconomics/w3-celo-patch) | Sohail | - | go | hi | hi |
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [ethutils](https://github.com/grassrootseconomics/ethutils) | Sohail | - | go | active |
+| [fonbnk-go](https://github.com/grassrootseconomics/fonbnk-go) | Sohail | - | go | active |
+| [kotani-go](https://github.com/grassrootseconomics/kotani-go) | Sohail | - | go | active |
+| [celoutils](https://github.com/grassrootseconomics/celoutils) | Sohail | - | go | deprecated |
+| [w3-celo-patch](https://github.com/grassrootseconomics/w3-celo-patch) | Sohail | - | go | deprecated |
 
 ## External Libraries
 
 * The GE dev team actively contributes back to these code repositories
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [chainlib-eth](https://github.com/chaintool-py/chainlib-eth) | Louis | Sohail | py | mid | hi |
-| [chainlib](https://github.com/chaintool-py/chainlib) | Louis | Sohail | py | mid | hi |
-| [asynq](https://github.com/hibiken/asynq) | Sohail | - | go | hi | hi |
-| [africastalking](https://github.com/kamikazechaser/africastalking) | Sohail | - | go | lo | mid |
-| [locale](https://github.com/kamikazechaser/africastalking) | Sohail | - | go | lo | lo |
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [go-vise](https://github.com/nolash/go-vise) | Louis | - | go | active |
+| [w3](https://github.com/lmittmann/w3) | Sohail | - | go | active |
+| [river](https://github.com/riverqueue/river) | Sohail | - | go | active |
+| [locale](https://github.com/kamikazechaser/africastalking) | Sohail | - | go | active |
+| [africastalking](https://github.com/kamikazechaser/africastalking) | Sohail | - | go | active |
+| [chainlib-eth](https://github.com/chaintool-py/chainlib-eth) | Louis | Sohail | py | deprecated |
+| [chainlib-eth](https://github.com/chaintool-py/chainlib-eth) | Louis | Sohail | py | deprecated |
+| [chainlib](https://github.com/chaintool-py/chainlib) | Louis | Sohail | py | deprecated |
+| [asynq](https://github.com/hibiken/asynq) | Sohail | - | go | deprecated |
 
 ## Devops/Infrastructure
 
-| component | maintainer | support | tech | complexity | maturity |
-|---|---|---|---|---|---|
-| [celo-node](https://github.com/grassrootseconomics/celo-node) | Sohail | - | docker | lo | hi |
-| [cic-stack-publish](https://github.com/grassrootseconomics/cic-stack-publish) | Sohail | - | docker | lo | mid |
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [celo-node](https://github.com/grassrootseconomics/celo-node) | Sohail | - | docker | deprecated |
+| [cic-stack-publish](https://github.com/grassrootseconomics/cic-stack-publish) | Sohail | - | docker | deprecated |
+
+## Educational Games
+
+| component | maintainer | support | tech | maintenance status |
+|---|---|---|---|---|
+| [mycofig](https://github.com/grassrootseconomics/mycofig) | Will | - | godot | active |
+| [vms](https://github.com/grassrootseconomics/vms) | Will | - | py | active |
