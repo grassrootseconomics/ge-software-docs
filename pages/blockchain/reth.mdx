@@ -1,0 +1,79 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Reth Devnet
+
+[Reth](https://github.com/paradigmxyz/reth) is a rust based Ethereum execution client. We recommend using it for development and small deployments of the custodial stack.
+
+## Docker deployment
+
+We provide an easy to use Docker setup to quickly setup a locally running devent node.
+
+## Chain details
+
+* chain ID: `1337`
+
+## Sample private keys
+
+These are always available on the devnet with topped up balances:
+
+* 0x14dc79964da2c08b23698b3d3cc7ca32193d9955,4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356
+* 0x15d34aaf54267db7d7c367839aaf71a00a2c6a65,47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a
+
+
+### Prerequisites
+
+- Docker
+- `chrony` or any other NTP daemon
+
+
+#### Quick Docker installation
+
+<Callout type="info" emoji="ℹ️">
+  This step can be skipped if you have Docker already installed.
+</Callout>
+
+
+```bash
+$ apt update && apt upgrade --yes
+$ apt install curl
+$ curl -fsSL https://get.docker.com | bash
+```
+
+#### Quick Other Required Packages installation
+
+<Callout type="info" emoji="ℹ️">
+  This step assumes you are on an Ubuntu/Debian based OS.
+</Callout>
+
+```bash
+$ apt install git chrony aria2 unzip
+```
+
+### Setup
+
+#### 1. Bring up Reth node container
+
+Create the following `docker-compose.yaml` file:
+
+```yaml
+services:
+  devnet:
+    image: ghcr.io/paradigmxyz/reth:latest
+    restart: unless-stopped
+    command: "node --datadir /root/devnet-chaindata --dev --dev.block-time 1s --http --http.addr 0.0.0.0 --ws --ws.addr 0.0.0.0"
+    ports:
+      - "127.0.0.1:8545:8545"
+      - "127.0.0.1:8546:8546"
+    volumes:
+      - devnet-chaindata:/root/devnet-chaindata   
+
+volumes:
+  devnet-chaindata:
+    driver: local
+```
+
+And then bring it up with:
+
+```bash
+$ docker compose up -d
+```

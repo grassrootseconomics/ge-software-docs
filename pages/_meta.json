@@ -3,6 +3,7 @@
   "addresses": "Addresses",
   "components": "Software Components",
   "blockchain": "Blockchain Stack",
+  "custodial": "Custodial Stack",
   "smart-contracts": "Smart Contracts Setup",
   "data": "Data Stack",
   "about": {
