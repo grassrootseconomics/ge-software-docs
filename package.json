@@ -16,6 +16,7 @@
   "bugs": {
     "url": "https://github.com/shuding/nextra-docs-template/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/shuding/nextra-docs-template#readme",
   "dependencies": {
     "next": "^13.5.6",
