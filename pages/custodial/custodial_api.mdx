@@ -1,0 +1,154 @@
+## Custodial API integration guide
+
+The custodial API allows any authenticated and authorized clients to perform certain chain signing actions over HTTP.
+
+In general, such an HTTP client can perform actions such as:
+
+* Create custodial accounts
+* Transfer tokens
+* Deposit tokens into a pool
+* Swap tokens from a pool
+* Initiate an offramp request
+* Initiate an onramp request
+* Track originating transaction statuses
+* Custodial account health checks
+
+The details of the API are:
+
+**Base path**: `HOST:PORT/api/v2`
+
+Required headers:
+
+* `X-GE-AUTH`: API key
+
+The API is documentation is accesible at: `HOST:PORT/docs`. Additionally, the swagger spec can be found [here](https://github.com/grassrootseconomics/eth-custodial/blob/master/docs/swagger.yaml).
+
+The request types can be inffered from the documentation above. The response structure and types are described below:
+
+The general response structure is:
+
+Successful:
+
+```json
+{
+    "ok": true,
+    "description": String,
+    "result": Object
+}
+```
+
+Error:
+
+```json
+{
+    "ok": true,
+    "description": String,
+    "errorCode": String
+}
+```
+
+
+Response result object description:
+
+### POST /account/create
+
+None
+
+### GET /account/status/:address
+
+```json
+{
+    "gasBalance": String, // Chain gas balance
+    "networkNonce": Number, // Chain nonce
+    "internalNonce": Number, // Internal nonce
+    "active": Boolean // Whether successfully registered on chain AND created on custodial system
+}
+```
+
+### GET /account/otx/:address?next=&cursor=&perPage=
+
+This is a paginated endpoint. Refer to the pagination guide below to undertsand how to correctly pass in the query params.
+
+```json
+{
+    "otx": Array, // An array of an OTX object, see the OTX section below for a complete structure
+    "first": Number, // Id of the first object in the array
+    "last": Number // Id of the last object in the array
+}
+```
+
+### POST /pool/swap
+
+```json
+{
+    "trackingId": String // Tracking Id
+}
+```
+
+### POST /pool/swap
+
+```json
+{
+    "trackingId": String // Tracking Id
+}
+```
+
+### POST /pool/quote
+
+```json
+{
+    "outValue": String, // Expected out value from the swap
+    "includesFeesDeduction": Boolean // Whether the outValue includes the fees 
+}
+```
+
+### GET /system
+
+```json
+{
+    "systemSigner": String // Current system signer address
+}
+```
+
+### POST /token/transfer
+
+```json
+{
+    "trackingId": String // Tracking Id
+}
+```
+
+### GET /otx/track/:trackingId
+
+```json
+{
+    "otx": Object // OTX Object, see the OTX section below for a complete structure
+}
+```
+
+## OTX structure
+
+```json
+{
+    "id": Number, // Database id
+    "trackingId": String, // System genmerated UUID
+    "otxType": String, // OTX Type
+    "signerAccount": String, // Signer address
+    "rawTx": String, // Ethereum raw tx hex
+    "nonce": Number, // Nonce
+    "replaced": Boolean, // Whether replaced or not
+    "createdAt": String, // Timestamp
+    "updatedAt": String, // Timestamp
+    "status": String // Dispatch status
+}
+```
+
+## Pagination guide
+
+Some API endpoints use a modified cursor pagination.
+
+The pagination expects the following query string:
+
+- `?perPage=` (int) - No. of items to return. Has a hard limit of 100.
+- `?next=` (boolean) - If true, scrolls forward else backwards.
+- `?cursor=` (id:int) - Used with the forward query. If pagination forwards, pass in the id of the last result i.e. `results[length(results) - 1]` or `last` field value. If paginating backwards pass the id of the first element of the current result set i.e. `results[0]` or `first` field value.

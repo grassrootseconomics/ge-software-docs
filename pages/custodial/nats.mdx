@@ -1,0 +1,276 @@
+## NATS integration guide
+
+The custodial stack hevaily utilizes NATS JetStream to emit all relevant events to any connected client. Primarily there are 2 main types of events:
+
+1. **Chain related events**: These are specifically emitted by the eth-tracker component. They only contain GE related smart contract events as they are tracked in realtime from the blockchain. EOA addresses which are registered on the GE accounts index are also tracked for specific events e.g. contract creations and well known stable coin transfers.
+2. **Custodial related events**: These are specifically emitted by the `eth-custodial` component to allow integrating clients to keep track of the custodial originating transaction.
+
+
+### NATS consumer recommendations
+
+Related docs: https://docs.nats.io/nats-concepts/jetstream/consumers#general
+
+* Use a durable client.
+* Use a pull type consumer.
+* Explictly ACK a message after processing it. This allows NATS to redeliver the message incase of a failure on the integrating client.
+
+
+### Chain related events
+
+* **Stream name**: `TRACKER.*`
+
+A consumer can either subscribe to all subjects with `TRACKER.*` or filter individual subjects that are further described below.
+
+The general structure of the message payload is:
+
+```json
+{
+    "block": Number,
+    "contractAddress": String,
+    "success": Boolean,
+    "timetamp" Number,
+    "transactionHash": String,
+    "transactionType": String,
+    "payload": Object
+}
+```
+
+Where:
+
+* `contractAddress`: The contract address which emitted the specific chain event when success is true otherwise it is the contract address with which the signer interacted with when success is false.
+* `success`: True if successfully mined else false if the transaction reverted.
+* `transactionType`: The description of the transaction type. This will also match the subject name.
+* `payload`: This includes additional details in relation to the transaction type.
+
+Additioanlly, the NATS message ID is always in the format: `transactionHash:transactionIndex` this allows the client to deduplicate if necessary.
+
+Individual transaction types and their payload are described below. The payload is consistent with both successful and reverted transactions. In certain reverted cases, the 0 value of the type is used as the value for certain payload keys.
+
+#### `TRACKER.CONTRACT_CREATION`  
+
+This is a special event that is emmited when an EOA account creates a contract.
+
+```json
+{
+    "from": String // Smart contract publisher
+}
+```
+
+#### `TRACKER.CUSTODIAL_REGISTRATION`  
+
+This event is emmited when an account is created, registered and topped up with gas on-chain by `eth-custodial`. If successful, it signals that the custodial account is ready for use.
+
+```json
+{
+    "account": String // Account address
+}
+```
+
+#### `TRACKER.FAUCET_GIVE`  
+
+This event is emmited when gas is requested from the faucet.
+
+
+```json
+{
+    "recipient": String, // Account address
+    "token": String, // Faceut gifted token address
+    "amount": String // Account address
+}
+```
+
+#### `TRACKER.INDEX_ADD`  
+
+This event is emmited when an address is added to any GE index.
+
+
+```json
+{
+    "address": String // Account address
+}
+```
+
+#### `TRACKER.INDEX_ADD`  
+
+This event is emmited when an address is removed from any GE index.
+
+
+```json
+{
+    "address": String // Account address
+}
+```
+
+#### `TRACKER.OWNERSHIP_TRANSFERRED`  
+
+This event is emmited when a contracts ownership is transffered to another address.
+
+
+```json
+{
+    "previousOwner": String, // Previous owner account address
+    "newOwner": String // New onwer account address
+}
+```
+
+#### `TRACKER.POOL_DEPOSIT`  
+
+This event is emmited when a token is deposited into any swap pool. The amount values are in relation to the token's decimal precision.
+
+
+```json
+{
+    "initiator": String, // Initiator account address
+    "tokenIn": String, // Token address
+    "amountIn": String // Amount deposited
+}
+```
+
+#### `TRACKER.POOL_SWAP`  
+
+This event is emmited when a token is swapped/withdrawn from any swap pool. The amount values are in relation to the token's decimal precision.
+
+
+```json
+{
+    "initiator": String, // Initiator account address
+    "tokenIn": String, // Token in address
+    "tokenOut": String, // Token out address
+    "amountIn": String, // Swap amount in
+    "amountIn": String, // Swap amount out
+    "fee": String // Fee amount
+}
+```
+
+#### `TRACKER.QUOTER_PRICE_INDEX_UPDATED`  
+
+This event is emmited when the exchange rate is updated on the pool quoter smart contract. The exchange rate value has a precision of 10^4 ([More details](https://github.com/grassrootseconomics/price-index-quoter/blob/master/test/PriceIndexQuoter.t.sol#L20)).
+
+
+```json
+{
+    "token": String, // Token address
+    "exchangeRate": String // Updated exchange rate
+}
+```
+
+#### `TRACKER.SEAL_STATE_CHANGE`  
+
+This event is emmited when the seal state changes for any GE related smart contract.
+
+
+```json
+{
+    "final": Boolean, // Final state
+    "sealState": String // State value big.Int value as a string 
+}
+```
+
+#### `TRACKER.TOKEN_APPROVE`  
+
+This event is emmited when an spend approval is requested on a token.
+
+
+```json
+{
+    "owner": String, // Owner address
+    "spender": String, // Spender address 
+    "value": String // Value of the approval
+}
+```
+
+#### `TRACKER.TOKEN_BURN`  
+
+This event is emmited when tokens are burnt.
+
+
+```json
+{
+    "tokenBurner": String, // Burner address 
+    "value": String // Value of the burn
+}
+```
+
+#### `TRACKER.TOKEN_MINT`  
+
+This event is emmited when tokens are minted.
+
+
+```json
+{
+    "tokenMinter": String, // Minter address 
+    "to": String, // Mint receiver address 
+    "value": String // Value of the burn
+}
+```
+
+#### `TRACKER.TOKEN_TRANSFER`  
+
+This event is emmited when tokens are transferred either through the transfer to transferFrom call.
+
+
+```json
+{
+    "from": String, // Sender address 
+    "to": String, // Receiver address 
+    "value": String // Value of the burn
+}
+```
+
+### Types additional information
+
+* All addresses are checksummed Ethereum addresses.
+* All numbers/amount related data in the payload object are of string type (converted from big.int).
+* The zero value of an address is the zero address i.e `0x0000000000000000000000000000000000000000`
+
+### Custodial related events
+
+Track a custodial originating transaction's state.
+
+* **Stream name**: `CUSTODIAL.*`
+
+A consumer can either subscribe to all subjects with `CUSTODIAL.*` or filter individual subjects that are further described below.
+
+The general structure of the message payload is:
+
+```json
+{
+    "trackingId": String,
+    "status": String
+}
+```
+
+#### Status state change
+
+Generally the status of a transaction changes as follows:
+
+For a successful transaction:
+
+1. `PENDING`: Successfully signed and stored in the OTX store.
+2. `IN_NETWORK`: Signed tx successfuly dispatched to the RPC node.
+3. `SUCCESS`: Signed tx successfuly mined on the chain.
+
+For a failed dispatch:
+
+1. `PENDING`: Successfully signed and stored in the OTX store.
+2. Any of the below depending on the failure reason:
+
+* `LOW_NONCE`: On chain nonce > internal nonce.
+* `NO_GAS`: Signing account does not have enough gas to submit the tx.
+* `LOW_GAS_PRICE`: Set gas price is lower than network conditions require.
+* `REPLACEMENT_UNDERPRICED`: Replacement tx has lower gas settings.
+* `NETWORK_ERROR`: Network related errors.
+* `UNKNOWN_RPC_ERROR`: Unknown RPC error (gets logged by the dispatcher in any case).
+
+For a reverted transaction:
+
+1. `PENDING`: Successfully signed and stored in the OTX store.
+2. `IN_NETWORK`: Signed tx successfuly dispatched to the RPC node.
+3. `REVERTED`: Signed tx reverted chain.
+
+### Go structs
+
+The event structs can be imported from:
+
+* chain events: https://github.com/grassrootseconomics/eth-tracker/pkg/event
+* custodial events: https://github.com/grassrootseconomics/eth-custodial/pkg/event
