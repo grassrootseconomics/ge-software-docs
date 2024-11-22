@@ -13,6 +13,9 @@ Grassroots Economics provides a script to quickly deploy all core contracts + a 
 * Access to an Ethereum node
 * Atleast 1 ETH
 
+<Callout type="info" emoji="ℹ️">
+  Commmented addresses below are just placeholder addresses on Celo Alfajores testnet. You should replace them with your own addresses.
+</Callout>
 
 ### Steps
 
@@ -77,7 +80,9 @@ cast send --value 10ether 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
 ```bash
 # 0x1e2FA554eF2d72F8DD6396582C2ED7a752ef8F55
 ge-publish p custodial --faucet 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e --user-index 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1 --system-account-address 0x3feCC87C2c102984865B996de340bb2C6AdCF01E
-```cast send  0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x506f6f6c496e6465780000000000000000000000000000000000000000000000 0xEDBA4dd5D72143052EDD8e799DEf52E24B4E10bd
+cast send  0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x506f6f6c496e6465780000000000000000000000000000000000000000000000 0xEDBA4dd5D72143052EDD8e799DEf52E24B4E10bd
+```
+
 8. Setup user index
 
 ```bash
@@ -102,6 +107,10 @@ ge-publish p registry --identifier AccountIndex --identifier CustodialRegistrati
 ```
 
 11. Setup the contracts registry
+
+<Callout type="info" emoji="ℹ️">
+  The commented string2bytes32 are fixed. You can use them as your first argumenbt to the set call.
+</Callout>
 
 ```bash
 # string to bytes32 identifiers
@@ -130,20 +139,13 @@ cast send  0xD774bc082003eaF8DF74eEcD43AD44F03D488418 "addWriter(address)" 0x3fe
 13. Publish some tokens and add them to the tokens index
 
 ```bash
-# 0xDb5051505Eb3B9eB878e3dF6f548aE2058445CCa
-# ge-publish p det --name "GE Points" --symbol "GEPOINTS" --community-fund 0x3feCC87C2c102984865B996de340bb2C6AdCF01E
-# Add it to the tokens index
-# cast send 0xD774bc082003eaF8DF74eEcD43AD44F03D488418 "add(address)" 0xDb5051505Eb3B9eB878e3dF6f548aE2058445CCa
-# Mint some tokens/vouchers to ourselves but we first need to add our key as a writer in the token
-# cast send 0xDb5051505Eb3B9eB878e3dF6f548aE2058445CCa "addWriter(address)" 0x3feCC87C2c102984865B996de340bb2C6AdCF01E
-# cast send 0xDb5051505Eb3B9eB878e3dF6f548aE2058445CCa "mintTo(address,uint256)" # 0x3feCC87C2c102984865B996de340bb2C6AdCF01E 100000000
-
-
 # Publish a standard ERC20
 # 0x59C463e0f3d824d34EE898EC9dFA2300e7996f5F
 ge-publish p erc20--name "Kilifi" --symbol "KILIFI"
 cast send 0x59C463e0f3d824d34EE898EC9dFA2300e7996f5F "mintTo(address,uint256)" 0x3feCC87C2c102984865B996de340bb2C6AdCF01E 100000000
 ```
 
-14. https://software.grassecon.org/smart-contracts/swappool
+14. To deploy a pool, refer to:
+
+ https://software.grassecon.org/smart-contracts/swappool
 
