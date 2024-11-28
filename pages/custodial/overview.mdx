@@ -15,11 +15,18 @@ Below is a high level overview of how different components interact and make up 
 
 The following are required in preparation of running the custodial stack:
 
-#### System requirements
+#### Minimum system requirements
 
 * Stable internet connection
 * Access to an Ethereum/EVM node with RPC and websockets enabled
 * Atleast 2 GB of RAM (Approximate)
+
+To self-host an entire custodial setup in production, we recommend:
+
+1. Custodial Stack Backend: 16 GB RAM, 8 vCPU with atleast 50 GB SSD storage. This roughly costs anywhere between $40 - $100 a month depending on your preffered cloud provider. This VM would run the enitre backend stack on a single docker host. It should comfortably accomodate ~ 10k daily active users.
+2. RPC full node: 32 GB RAM, 16 CPU with atleast 2 TB SSD Storage. This rougly costs anywhere between $120 - $200. We recommend obtaining a baremetal server to run this. This VM would run the Celo blockchain stack. It is possible to replace this with a 3rd party RPC provider like dRPC or Ankr.
+
+Please reach out to the tech team to discuss your requirements in more details.
 
 ### Chain requirements
 
