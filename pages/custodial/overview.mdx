@@ -21,16 +21,50 @@ The following are required in preparation of running the custodial stack:
 * Access to an Ethereum/EVM node with RPC and websockets enabled
 * Atleast 2 GB of RAM (Approximate)
 
-To self-host an entire custodial setup in production, we recommend:
-
-1. Custodial Stack Backend: 16 GB RAM, 8 vCPU with atleast 50 GB SSD storage. This roughly costs anywhere between $40 - $100 a month depending on your preffered cloud provider. This VM would run the enitre backend stack on a single docker host. It should comfortably accomodate ~ 10k daily active users.
-2. RPC full node: 32 GB RAM, 16 CPU with atleast 2 TB SSD Storage. This rougly costs anywhere between $120 - $200. We recommend obtaining a baremetal server to run this. This VM would run the Celo blockchain stack. It is possible to replace this with a 3rd party RPC provider like dRPC or Ankr.
-
-Please reach out to the tech team to discuss your requirements in more details.
-
 ### Chain requirements
 
 * 1 Ether to setup the smart contracts
 * EVM hardfork minimal requirement: Istanbul
 * Instant finality recommended (no chance of block reorgs)
+
+### Self-hosted budget guideline
+
+This is a guide to approximate the monthly costs of completely self-hosting the custodial stack + other components listed here on a cloud provider for a small deployment which can support upto 10k active users. 
+
+#### Custodial Backend Stack Server
+
+This hosts all backend services and databases.
+
+Estimate: $40 - $100 (Depending on your choosen cloud provider).
+Recommended Specs: 16 GB RAM, 8 vCPU with atleast 50 GB SSD storage.
+
+#### Blockchain RPC Server (Baremetal)
+
+This hosts the CELO RPC node and is future proofed for 1 year. We recommend using a provider which supports storage upgrades.
+
+Estimate: $120 - $250 (Depending on your choosen baremetal provider).
+Recommended Specs: 32 GB RAM, 16 CPU with atleast 2 TB SSD storage.
+
+It is possible to use 3rd party RPC providers like dRPC and Ankr or completely free public RPC nodes like Forno, however, we do not recommend this.
+
+#### AfricasTalking Subscription
+
+This is required for those who want to run the USSD service within Africa. Please refer to https://africastalking.com/pricing for more details.
+
+One-time setup costs estimate: $70 - $100 (SMS ID)
+Monthy subscription for shared USSD code: $190
+
+Varying costs depending on AU (active users). If a user were to do 5 transfers daily, it would cost:
+
+USSD: 5 * 45 UGX * 5 (2 min session) =  1125 UGX
+SMS: 25 UGX * 5 * 2 (SMS sent to sender and recipient) = 250 UGX
+
+~ 1500 UGX per active user daily.
+
+#### CELO Gas Costs requirements
+
+Assuming there are ~500 daily transactions and you would like to sponsor all the gas costs.
+
+Estimate: < 2.5 CELO/Daily
+
 
