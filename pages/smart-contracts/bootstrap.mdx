@@ -14,7 +14,7 @@ Grassroots Economics provides a script to quickly deploy all core contracts + a 
 * Atleast 1 ETH
 
 <Callout type="info" emoji="ℹ️">
-  Commmented addresses below are just placeholder addresses on Celo Alfajores testnet. You should replace them with your own addresses.
+  Some flags have been omitted, refer to both ge-publish and cast "help" for required flags.
 </Callout>
 
 ### Steps
@@ -22,7 +22,6 @@ Grassroots Economics provides a script to quickly deploy all core contracts + a 
 1. Publish a token index:
 
 ```bash
-# 0xD774bc082003eaF8DF74eEcD43AD44F03D488418
 ge-publish p token-index
 ```
 
@@ -141,7 +140,7 @@ cast send $TOKEN "mintTo(address,uint256)" $YOUR_PUBLIC_KEY 100000000
 cast send $TOKEN_INDEX "add(address)" $TOKEN
 ```
 
-14. To deploy a pool, refer to:
+14. (Optional) To deploy a pool, refer to:
 
  https://software.grassecon.org/smart-contracts/swappool
 
@@ -150,7 +149,6 @@ cast send $TOKEN_INDEX "add(address)" $TOKEN
 <Callout type="info" emoji="ℹ️">
   The system account can be dumped via the ETH custodial API using the /system endpoint
 </Callout>
-
 
 ```bash
 # Top up the system account
