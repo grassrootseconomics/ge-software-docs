@@ -15,7 +15,7 @@ Below is a high level overview of how different components interact and make up 
 
 The following are required in preparation of running the custodial stack:
 
-#### System requirements
+#### Minimum system requirements
 
 * Stable internet connection
 * Access to an Ethereum/EVM node with RPC and websockets enabled
@@ -27,3 +27,52 @@ The following are required in preparation of running the custodial stack:
 * EVM hardfork minimal requirement: Istanbul
 * Instant finality recommended (no chance of block reorgs)
 
+### Self-hosted budget guideline
+
+This is a guide to approximate the monthly costs of completely self-hosting the custodial stack + other components listed here on a cloud provider for a small deployment which can support upto 10k active users. 
+
+#### Custodial Backend Stack Server
+
+This hosts all backend services and databases.
+
+* Estimate: $40 - $100 (Depending on your choosen cloud provider).
+* Recommended Specs: 16 GB RAM, 8 vCPU with atleast 50 GB SSD storage.
+* Time estimate: ~ 4 - 5  hours for complete setup using provided setup instructions in the next sections.
+
+#### Blockchain RPC Server (Baremetal)
+
+This hosts the CELO RPC node and is future proofed for 1 year. We recommend using a provider which supports storage upgrades.
+
+* Estimate: $120 - $250 (Depending on your choosen baremetal provider).
+* Recommended Specs: 32 GB RAM, 16 CPU with atleast 2 TB SSD storage.
+* Time estimate: ~ 1 - 2 hours for complete setup using provided instructions in the next setup.
+
+It is possible to use 3rd party RPC providers like dRPC and Ankr or completely free public RPC nodes like Forno, however, we do not recommend this.
+
+#### AfricasTalking Subscription
+
+This is required for those who want to run the USSD service within Africa. Please refer to https://africastalking.com/pricing for more details.
+
+* One-time setup costs estimate: $70 - $100 (SMS ID)
+* Monthy subscription for shared USSD code: $190
+* Time estimate: Depends on AfricasTalking, tech setup is done in the `Custodial Backend Stack Server`.
+
+Varying costs depending on AU (active users). If a user were to do 1 transfer daily, it would cost:
+
+* USSD: 1 * 45 UGX * 3 (1 min session) =  135 UGX
+* SMS: 25 UGX * 1 * 2 (SMS sent to sender and recipient) = 100 UGX
+* ~ 235 UGX per active user daily.
+
+#### CELO Gas Costs requirements
+
+Assuming there are ~500 daily transactions and you would like to sponsor all the gas costs.
+
+* Estimate: < 2.5 CELO/Daily
+
+#### Sarafu.Network Dapp (Web3 Only)
+
+If you would like to run your own fork/copy of the Dapp website
+
+This component required the tracker and indexer to be setup in the custodial stack. This component can be run on Vercel for free or on a self-hosted server.
+
+* Estimate: Free - $25

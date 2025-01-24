@@ -14,7 +14,7 @@ Grassroots Economics provides a script to quickly deploy all core contracts + a 
 * Atleast 1 ETH
 
 <Callout type="info" emoji="ℹ️">
-  Commmented addresses below are just placeholder addresses on Celo Alfajores testnet. You should replace them with your own addresses.
+  Some flags have been omitted, refer to both ge-publish and cast "help" for required flags.
 </Callout>
 
 ### Steps
@@ -22,7 +22,6 @@ Grassroots Economics provides a script to quickly deploy all core contracts + a 
 1. Publish a token index:
 
 ```bash
-# 0xD774bc082003eaF8DF74eEcD43AD44F03D488418
 ge-publish p token-index
 ```
 
@@ -30,21 +29,18 @@ ge-publish p token-index
 2. Publish a user index:
 
 ```bash
-# 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1
 ge-publish p user-index
 ```
 
 3. Publish a gas faucet:
 
 ```bash
-# 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
 ge-publish p faucet
 ```
 
 4. Publish a period backend for the gas faucet:
 
 ```bash
-# 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e
 ge-publish p period
 ```
 
@@ -52,25 +48,25 @@ ge-publish p period
 
 ```bash
 # Set the gas faucet as the poker with setPoker(address)
-cast send 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e "setPoker(address)" 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
+cast send $PERIOD_BACKEND "setPoker(address)" $GAS_FAUCET
 # Set the cooldown period after which a user may request for gas again with setPeriod(uint256) [86400=24hrs]
-cast send 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e "setPeriod(uint256)" 86400
+cast send $PERIOD_BACKEND "setPeriod(uint256)" 86400
 # Set the balance threshold such that a user can only request for more gas if their balance is less than the threshold at that time
 # 0.03 CELO ~= 5 token transfers in the worse network conditions ~= 2 KES [30000000000000000]
-cast send 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e "setBalanceThreshold(uint256)" 30000000000000000
+cast send $PERIOD_BACKEND "setBalanceThreshold(uint256)" 30000000000000000
 ```
 
 6. Setup the gas faucet
 
 ```bash
 # Set the top up amount: 0.03 CELO ~= 5 token transfers in the worse network conditions ~= 2 KES [30000000000000000]
-cast send 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A "setAmount(uint256)" 30000000000000000 
+cast send $GAS_FAUCET "setAmount(uint256)" 30000000000000000
 # Set the period checker pointing it to the period backend
-cast send 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A "setPeriodChecker(address)" 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e
+cast send $GAS_FAUCET "setPeriodChecker(address)" $PERIOD_BACKEND
 # Set the user index on the gas faucet (This acts as an ACL)
-cast send 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A "setRegistry(address)" 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1
+cast send $GAS_FAUCET "setRegistry(address)" $USER_INDEX
 # Top up the faucet. This should be done regularly.
-cast send --value 10ether 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
+cast send --value 10ether $GAS_FAUCET
 ```
 
 7. Publish a custodial registration proxy
@@ -78,22 +74,22 @@ cast send --value 10ether 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
 * Remember to reset the system account address after setting up the eth-custodial backend.
 
 ```bash
-# 0x1e2FA554eF2d72F8DD6396582C2ED7a752ef8F55
-ge-publish p custodial --faucet 0xc90CE62237fC1AFAbD492FD517d8d71D0095E26e --user-index 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1 --system-account-address 0x3feCC87C2c102984865B996de340bb2C6AdCF01E
-cast send  0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x506f6f6c496e6465780000000000000000000000000000000000000000000000 0xEDBA4dd5D72143052EDD8e799DEf52E24B4E10bd
+# We pass a place holder value i.e your public key as the initial system account address
+# We will replace this value later
+ge-publish p custodial --faucet $GAS_FAUCET --user-index $USER_INDEX --system-account-address $YOUR_PUBLIC_KEY
 ```
 
 8. Setup user index
 
 ```bash
 # Add the custodial registration proxy as a writer to the user index
-cast send 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1 "addWriter(address)" 0x1e2FA554eF2d72F8DD6396582C2ED7a752ef8F55
+cast send $USER_INDEX "addWriter(address)" $CUSTODIAL_REGISTRATION_PROXY
 ```
 
 9. Publish a  pools index
 
 ```bash
-# 0xEDBA4dd5D72143052EDD8e799DEf52E24B4E10bd
+# A pool index is usually the same as a token index
 ge-publish p token-index
 ```
 
@@ -102,14 +98,13 @@ ge-publish p token-index
 This is the entry point to discover all other contracts.
 
 ```bash
-# 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5
 ge-publish p registry --identifier AccountIndex --identifier CustodialRegistrationProxy --identifier GasFaucet --identifier TokenIndex --identifier PoolIndex
 ```
 
 11. Setup the contracts registry
 
 <Callout type="info" emoji="ℹ️">
-  The commented string2bytes32 are fixed. You can use them as your first argumenbt to the set call.
+  The commented string2bytes32 are fixed. You can use them as your first argument to the set call.
 </Callout>
 
 ```bash
@@ -121,31 +116,44 @@ ge-publish p registry --identifier AccountIndex --identifier CustodialRegistrati
 # TokenIndex=0x546f6b656e496e64657800000000000000000000000000000000000000000000
 # PoolIndex=0x506f6f6c496e6465780000000000000000000000000000000000000000000000
 
-cast send 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x437573746f6469616c526567697374726174696f6e50726f7879000000000000 0x1e2FA554eF2d72F8DD6396582C2ED7a752ef8F55
-cast send 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x4163636f756e74496e6465780000000000000000000000000000000000000000 0x5210bC940cCC4f75C387C63ECdeE1D22E9db41A1
-cast send 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x546f6b656e496e64657800000000000000000000000000000000000000000000 0xD774bc082003eaF8DF74eEcD43AD44F03D488418
-cast send 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x506f6f6c496e6465780000000000000000000000000000000000000000000000 0xEDBA4dd5D72143052EDD8e799DEf52E24B4E10bd
-cast send 0x0f8E97ef2d6A42CF62549D4924FCBdcE83A1C6A5 "set(bytes32,address)" 0x4761734661756365740000000000000000000000000000000000000000000000 0x8a10a01ccFac5719945eFf0a258F08eA34c1235A
+cast send $REGISTRY "set(bytes32,address)" 0x437573746f6469616c526567697374726174696f6e50726f7879000000000000 $CUSTODIAL_REGISTRATION_PROXY
+cast send $REGISTRY "set(bytes32,address)" 0x4163636f756e74496e6465780000000000000000000000000000000000000000 $USER_INDEX
+cast send $REGISTRY "set(bytes32,address)" 0x546f6b656e496e64657800000000000000000000000000000000000000000000 $TOKEN_INDEX
+cast send $REGISTRY "set(bytes32,address)" 0x506f6f6c496e6465780000000000000000000000000000000000000000000000 $POOL_INDEX
+cast send $REGISTRY "set(bytes32,address)" 0x4761734661756365740000000000000000000000000000000000000000000000 $GAS_FAUCET
 ```
 
-12. Add a writer to any of the published indexes
+12. (Optional) Add a writer to any of the published indexes
 
 ```bash
 # Add a writer to the token index
-cast send  0xD774bc082003eaF8DF74eEcD43AD44F03D488418 "addWriter(address)" 0x3feCC87C2c102984865B996de340bb2C6AdCF01E
+cast send  $TOKEN_INDEX "addWriter(address)" $YOUR_PUBLIC_KEY
 ```
 
 
-13. Publish some tokens and add them to the tokens index
+13. (Optional) Publish some tokens and add them to the tokens index
 
 ```bash
 # Publish a standard ERC20
-# 0x59C463e0f3d824d34EE898EC9dFA2300e7996f5F
 ge-publish p erc20--name "Kilifi" --symbol "KILIFI"
-cast send 0x59C463e0f3d824d34EE898EC9dFA2300e7996f5F "mintTo(address,uint256)" 0x3feCC87C2c102984865B996de340bb2C6AdCF01E 100000000
+cast send $TOKEN "mintTo(address,uint256)" $YOUR_PUBLIC_KEY 100000000
+cast send $TOKEN_INDEX "add(address)" $TOKEN
 ```
 
-14. To deploy a pool, refer to:
+14. (Optional) To deploy a pool, refer to:
 
  https://software.grassecon.org/smart-contracts/swappool
+
+15. Set up custodial registration proxy
+
+<Callout type="info" emoji="ℹ️">
+  The system account can be dumped via the ETH custodial API using the /system endpoint
+</Callout>
+
+```bash
+# Top up the system account
+cast send --value 10ether $SYSTEM_ACCOUNT
+# Set the new system account on the custodial registration proxy
+cast send $CUSTODIAL_REGISTRATION_PROXY "setNewSystemAccount(address)" $SYSTEM_ACCOUNT
+```
 
