@@ -4,6 +4,7 @@
   "components": "Software Components",
   "blockchain": "Blockchain Stack",
   "custodial": "Custodial Stack",
+  "ussd": "USSD Stack",
   "smart-contracts": "Smart Contracts Setup",
   "data": "Data Stack",
   "about": {
