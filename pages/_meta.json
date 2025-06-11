@@ -1,6 +1,7 @@
 {
   "index": "Introduction",
   "addresses": "Addresses",
+  "rpc": "RPC Infra",
   "components": "Software Components",
   "blockchain": "Blockchain Stack",
   "custodial": "Custodial Stack",
