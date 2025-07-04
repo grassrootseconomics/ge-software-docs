@@ -6,6 +6,7 @@
   "blockchain": "Blockchain Stack",
   "custodial": "Custodial Stack",
   "ussd": "USSD Stack",
+  "swappool": "Swap Pool",
   "smart-contracts": "Smart Contracts Setup",
   "data": "Data Stack",
   "about": {

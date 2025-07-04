@@ -1,0 +1,99 @@
+
+# Swap Pool Integration
+
+Allows deposits in the form of liquidity donations, and withdrawals in the form of token swaps.
+
+## Synopsis
+
+| agent | action | agent change | pool change |
+|---|---|---|---|
+| alice | deposit(FOO, 1000000) | -1000000 FOO | +1000000 FOO |
+| bob | withdraw(FOO, BAR, 1000) | -1000 BAR, +1000 FOO | +1000 BAR, -1000 FOO |
+| alice | withdraw(BAR, FOO, 1000) | +1000 BAR, -1000 FOO | -1000 BAR, +1000 FOO |
+
+## Maximum Swap Input Calculation with Pool Constraints
+
+This allows external integration into the pool e.g. building routers or other applications that need to quickly determine the correct input value that will result in a valid swap given the current pool state and constraints.
+
+### Pool Constraints Overview
+
+When swapping tokens in a Sarafu Network Swap Pool, the following constraints must be considered:
+
+- **Token Limits**
+  - Each token has a maximum capacity:
+    - `inTokenLimit` for TokenA
+    - `outTokenLimit` for TokenB
+  - The pool cannot hold more than the limit for any token.
+
+- **Current Pool Balances**
+  - `poolInBalance`: Current amount of TokenA in the pool
+  - `poolOutBalance`: Current amount of TokenB in the pool
+
+- **Available Space (Holding Capacity)**
+  - `holdingA = max(0, inTokenLimit - poolInBalance)`
+  - `holdingB = max(0, outTokenLimit - poolOutBalance)`
+
+- **Swap Ratio**
+  - Determined by relative prices:
+    - `inRate` for TokenA
+    - `outRate` for TokenB
+  - Formula:
+
+    ```
+    outputB = (inputA * inRate * 10^outDecimals) / (outRate * 10^inDecimals)
+    ```
+
+- **User Balance Constraint**
+  - User cannot swap more TokenA than they own (`userInBalance`).
+
+---
+
+### Key Constraints for Successful Swap
+
+A swap will succeed only if:
+
+- **Input amount ≤ holdingA** (pool has space for TokenA)
+- **Output amount ≤ min(holdingB, poolOutBalance)** (pool has TokenB available)
+- **Input amount ≤ userInBalance** (user has sufficient balance)
+
+### Pseudocode
+
+```
+function maxSwapInput(
+    userInBalance: BigInt,
+    inTokenLimit: BigInt,
+    outTokenLimit: BigInt,
+    poolInBalance: BigInt,
+    poolOutBalance: BigInt,
+    inRate: UInt64,
+    outRate: UInt64,
+    inDecimals: UInt8,
+    outDecimals: UInt8
+) -> BigInt:
+    # 1. Calculate available space for tokens
+    holdingA = max(0, inTokenLimit - poolInBalance)
+    holdingB = max(0, outTokenLimit - poolOutBalance)
+    
+    # 2. Determine maximum TokenB that can be removed
+    maxOutputB = min(holdingB, poolOutBalance)
+    if maxOutputB == 0:
+        return 0  # No swap possible
+    
+    # 3. Calculate power of 10 for decimal adjustment
+    pow10In = 10 ** inDecimals
+    pow10Out = 10 ** outDecimals
+    
+    # 4. Compute maximum TokenA input using swap ratio
+    numerator = maxOutputB * outRate * pow10In
+    denominator = inRate * pow10Out
+    
+    if denominator == 0:
+        return 0  # Prevent division by zero
+    
+    inputA_bound = numerator // denominator  # Integer division
+    
+    # 5. Apply all constraints
+    maxInput = min(holdingA, inputA_bound, userInBalance)
+    
+    return maxInput
+```
