@@ -1,0 +1,59 @@
+# Credit Send
+
+## What is Credit Send?
+
+**Credit Send** allows you to send payment to someone using their preferred token, even when you hold a different token. The protocol automatically swaps your tokens through swap pools, making cross-community payments as easy as a regular send.
+
+## Flow
+
+- **SAT** = Sender's Active Token (your default token)
+- **RAT** = Recipient's Active Token (their preferred token)
+
+### Summary Flow
+
+1. **If SAT = RAT** → Normal direct send
+2. **If SAT ≠ RAT** → Look for a swap route through pools
+  - Route found → Enable Credit Send mode
+  - No route → Fall back to normal send
+
+![](/sat_rat.png)
+
+
+## Real-World Example
+
+### Scenario: Hailing a ride from a tuktuk driver in MNYUMBUNI community
+
+**You hold USDT tokens. The vendor prefers TUKTUK vouchers.**
+
+#### Your Setup
+- **Your Token (SAT)**: USDT
+- **Balance**: 1000 USDT
+- **Vendor's Token (RAT)**: TUKTUK
+
+
+#### The MNYUMBUNI Pool setup
+The MNYUMBUNI pool contains both TUKTUK and USDT:
+
+- **TUKTUK in pool (Holding Debt)**: 20861 TUKTUK
+- **TUKTUK limit**: 42000 TUKTUK
+- **Exchange rate**: 1 USDT = 128 TUKTUK
+- **Routing depth**: 0 (both tokens in same pool)
+
+#### What Happens
+
+1. **You select the vendor** as recipient
+2. **System detects**: KILIFI ≠ USD
+3. **System checks pools**: Found route through ROLA pool.
+4. **System displays**:
+   ```
+    Credit Available: 162.97 USDT
+   (You can swap up to 162.97 USDT -> 20861 TUKTUK)
+   ```
+
+5. **You enter**: "3 USDT" (to pay for a single ride)
+
+6. **Behind the scenes**:
+   - System swaps: 3 USDT → 384 TUKTUK (through MNYUMBUNI pool)
+   - Sends: 384 TUKTUK to vendor
+
+* Credit available is determined by `MaxSwap` logic as per [Integration](/integration) page.
