@@ -65,4 +65,47 @@ The MNYUMBUNI pool contains both TUKTUK and USDT:
    - System swaps: 2.34375 USDT → 300 TUKTUK (through MNYUMBUNI pool)
    - Sends: 300 TUKTUK to vendor
 
+### USSD API Example
+
+1. Check credit limits and display maxRAT available
+
+**Request:**
+```
+GET
+/credit-send/MNYUMBANI_POOL_ADDRESS/USDT_TOKEN_ADDRESS/TUKTUK_TOKEN_ADDRESS/SENDER_WALLET_ADDRESS
+```
+
+**Response:**
+```json
+{
+  "ok": true,
+  "description": "Credit send limits",
+  "result": {
+    "maxSAT": "162970000",
+    "maxRAT": "20861000000"
+  }
+}
+```
+
+2. Get reverse quote for sending RAT amount, use inputAmount in Swap
+
+**Request:**
+```
+GET
+/pool/reverse-quote/MNYUMBANI_POOL_ADDRESS/USDT_TOKEN_ADDRESS/TUKTUK_TOKEN_ADDRESS/RAT_AMOUNT
+```
+
+**Response:**
+```json
+{
+  "ok": true,
+  "description": "Required input amount for desired output",
+  "result": {
+    "inputAmount": "2343750",
+    "outputAmount": "300000000"
+  }
+}
+```
+
 * Credit available is determined by `MaxSwap` logic as per [Integration](/swappool/integration) page.
+
