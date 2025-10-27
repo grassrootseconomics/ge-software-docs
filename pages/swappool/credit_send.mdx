@@ -16,6 +16,11 @@
   - Route found → Enable Credit Send mode
   - No route → Fall back to normal send
 
+In Credit Send mode:
+1. You enter amount in RAT (recipient's token)
+2. System calculates maximum amount of SAT you can swap to RAT (using `MaxSwap` logic) + any fees
+3. System swaps SAT → RAT through pool(s)
+
 ![](/sat_rat.png)
 
 
@@ -42,18 +47,22 @@ The MNYUMBUNI pool contains both TUKTUK and USDT:
 #### What Happens
 
 1. **You select the vendor** as recipient
-2. **System detects**: KILIFI ≠ USD
+2. **System detects**: TUKTUK ≠ USD
 3. **System checks pools**: Found route through MNYUMBUNI pool.
 4. **System displays**:
    ```
-    Credit Available: 162.97 USDT
+    Credit Available: 20861 TUKTUK
    (You can swap up to 162.97 USDT -> 20861 TUKTUK)
    ```
 
-5. **You enter**: "3 USDT" (to pay for a single ride)
+5. **You enter**: "300 TUKTUK" (to pay for a single ride)
 
 6. **Behind the scenes**:
-   - System swaps: 3 USDT → 384 TUKTUK (through MNYUMBUNI pool)
-   - Sends: 384 TUKTUK to vendor
+   - System calculates required USDT to get 300 TUKTUK:
+     - 300 TUKTUK / 128 (rate) = 2.34375 USDT
+   - System checks your USDT balance (1000 USDT) → Sufficient
+   - System checks max swap capacity: 162.97 USDT → the Max
+   - System swaps: 2.34375 USDT → 300 TUKTUK (through MNYUMBUNI pool)
+   - Sends: 300 TUKTUK to vendor
 
 * Credit available is determined by `MaxSwap` logic as per [Integration](/swappool/integration) page.
